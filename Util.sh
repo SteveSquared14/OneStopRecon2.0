@@ -28,11 +28,11 @@ elif [ $# -gt 1 ]; then
 		echo "[!] Data extracted from $whoisDataInput"
 		while read line;
 		do
-		whoIsFunc $line > $outputFileName
+		whoIsFunc $line >> $outputFileName
 		done < ${whoisDataInput} 
 		echo "[!]Your file has been outputted to $outputFileName"
 	else
-		whoIsFunc $whoisDataInput > $outputFileName 
+		whoIsFunc $whoisDataInput >> $outputFileName 
 		echo "Your file has been outputted to $outputFileName"
 	fi
 fi
@@ -61,11 +61,11 @@ elif [ $# -gt 1 ]; then
 		echo "[!] Data extracted from $dnsDataInput"
 		while read line;
 		do
-		dnsCheck $line > $outputFileName 
+		dnsCheck $line >> $outputFileName 
 		done < ${dnsDataInput}
 		echo "[!]Your file has been outputted to $outputFileName"
 	else
-		dnsCheck $dnsDataInput > $outputFileName 
+		dnsCheck $dnsDataInput >> $outputFileName 
 		echo "[!]Your file has been outputted to $outputFileName"
 	fi
 fi
@@ -93,11 +93,11 @@ elif [ $# -gt 1 ]; then
 		echo "[!] Data extracted from $txtFileDataInput"
 		while read line;
 		do
-		txtFileChecks $line > $outputFileName
+		txtFileChecks $line >> $outputFileName
 		done < ${txtFileDataInput}
 		echo "[!]Your file has been outputted to $outputFileName"
 	else
-		txtFileChecks $txtFileDataInput > $outputFileName
+		txtFileChecks $txtFileDataInput >> $outputFileName
 		echo "[!]Your file has been outputted to $outputFileName"
 	fi
 fi
@@ -109,7 +109,7 @@ function metadataUtil(){
 fileName=$1
 outputFileName=$2
 	    echo "[!]Analysing $fileName"
-            metadataExtraction $fileName > $outputFileName
+            metadataExtraction $fileName >> $outputFileName
             echo "[!]Analysing Complete" 	    
 }
 
@@ -139,7 +139,7 @@ elif [ $# -gt 1 ]; then
 		done < ${bannerGrabbingInput}
 	       	echo "Your file has been outputted to $outputFileName"	
 else 
-	bannerGrab $bannerGrabbingInput > $outputFileName
+	bannerGrab $bannerGrabbingInput >> $outputFileName
 	echo "[!]File has been outputted to $outputFileName"
     fi
 fi
