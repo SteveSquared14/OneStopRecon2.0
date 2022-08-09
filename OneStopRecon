@@ -6,22 +6,6 @@ PathDir="$(pwd)"
 . $PathDir/util.sh
 
 
-function checkReadFile(){
-	if [ "$2" == "-f" ]; then
-		#chosenTool="bannerGrabbing"
-		argForTool="None"
-		#readFromFile="YES"
-		#fileToRead="$3"
-		#shift	
-	else
-		argForTool="$2"
-		#shift
-		#shift
-	fi	
-}
-
-
-
 counter=0
 while [ "$#" -gt 0 ]; do
 	selectedTool=$1
@@ -30,73 +14,103 @@ while [ "$#" -gt 0 ]; do
 		if [[ "$selectedTool" == "-f" ]] || [[ "$selectedTool" == "-o" ]]; then
 			doNotRunWarning="YES"
 			break
-		fi
-	#elif [ "$2" == "-f" ]; then
-	#		chosenTool="bannerGrabbing"
-	#		argForTool="None"
-	#		readFromFile="YES"
-	#		fileToRead="$3"	
+		fi	
 	else
 		case $selectedTool in
 			"-b")
 				chosenTool="bannerGrabbing"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi
 				;;
 			"-dB")
 				chosenTool="bingDorking"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi
 				;;
 			"-dD")
 				chosenTool="duckDuckGoDorking"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi
 				;;
 			"-dG")
 				chosenTool="googleDorking"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi
 				;;
 			"-M")
-				chosenTool="metadataExtract"
-				argForTool="$2"
-				shift
-				shift
+				chosenTool="metadataExtraction"
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi
 				;;
 			"-m")
 				chosenTool="googleMaps"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi
 				;;
 			"-n")
 				chosenTool="dnsEnumeration"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi
 				;;
 			"-s")
 				chosenTool="shodan"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi				
 				;;
 			"-t")
 				chosenTool="txtFileChecks"
-				argForTool="$2"
-				shift
-				shift
+				if [[ "$2" == "-f" ]]; then
+					shift
+				else	
+					argForTool="$2"
+					shift
+					shift
+				fi					
 				;;
 			"-w")
-				#checkReadFile
 				chosenTool="whoIs"
+				#Check if reading from file
 				if [[ "$2" == "-f" ]]; then
-					argForTool="None"
 					shift
 				else
 					argForTool="$2"
@@ -156,32 +170,72 @@ menu_help () {
 #Main execution flow for v2.0 below here
 
 if [[ "$doNotRunWarning" == "YES" ]]; then
-	echo "Warning, a tool must be specified before utilies"
+	echo "[!] Warning: A tool must be specified before utilies"
 elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
-	#echo "both no"
-	if [[ $chosenTool == "whoIs" ]]; then
-		#WORKING AS OF 7/8/22
-		#echo "value of chosenTool is $chosenTool"
+	if [[ $chosenTool == "bannerGrabbing" ]]; then
+		bannerGrab $argForTool
+	elif [[ $chosenTool == "bingDorking" ]]; then
+		Excute_All_Dorkings "-dB" $argForTool
+	elif [[ $chosenTool == "duckDuckGoDorking" ]]; then
+		Excute_All_Dorkings "-dD" $argForTool
+	elif [[ $chosenTool == "googleDorking" ]]; then
+		Excute_All_Dorkings -dG $argForTool
+	elif [[ $chosenTool == "metadataExtraction" ]]; then
+		metadataUtil $argForTool
+	elif [[ $chosenTool == "googleMaps" ]]; then
+		googleMaps $argForTool
+	elif [[ $chosenTool == "dnsEnumeration" ]]; then
+		dnsUtil $argForTool
+	elif [[ $chosenTool == "shodan" ]]; then
+		shodanFunc $argForTool
+	elif [[ $chosenTool == "txtFileChecks" ]]; then
+		txtFileUtil $argForTool
+	elif [[ $chosenTool == "whoIs" ]]; then
 		whoisUtil $argForTool
 	fi
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
-	#echo "read equal yes, save equal no"
 	if [[ $chosenTool == "whoIs" ]]; then
 		#DEBUGGED AND WORKING AS OF 8/8/2022
 		whoisUtil $fileToRead
+	elif [[ $chosenTool == "txtFileChecks" ]]; then
+		txtFileUtil $fileToRead
+	elif [[ $chosenTool == "dnsEnumeration" ]]; then
+		dnsUtil $fileToRead
+	else 
+		echo "[!] The specified module cannot take input from a file"
+		echo "[*] To use the specified module, enter one command line argument"
+		echo "[*] For help, enter \"--help\""
 	fi
 elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
-	#echo "read equal no, save equal yes"
 	if [[ "$chosenTool" == "whoIs" ]]; then
-		#echo "argForTool is $argForTool"
-		#WORKING AS OF 8/8/2022
 		whoisUtil $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "txtFileChecks" ]]; then
+		txtFileUtil $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "dnsEnumeration" ]]; then
+		dnsUtil $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "metadataExtraction" ]]; then
+		metadataUtil $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "bannerGrabbing" ]]; then
+		bannerGrab $argForTool $fileToSaveTo
+	else
+		echo "[!] The specified module cannot be output to a file"
+		echo "[*] To use the specified module, remove the \"-o\" command line option"
+	       	echo "[*] For help, enter \"--help\""
 	fi
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" == "YES" ]]; then
-	#echo "read equal yes, save equal yes"
 	if [[ "$chosenTool" == "whoIs" ]]; then
 		whoisUtil $fileToRead $fileToSaveTo
+	elif [[ $chosenTool == "txtFileChecks" ]]; then
+		txtFileUtil $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "dnsEnumeration" ]]; then
+		dnsUtil $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "metadataExtraction" ]]; then
+		metadataUtil $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "bannerGrabbing" ]]; then
+		bannerGrab $argForTool $fileToSaveTo
+	else
+		echo "[!] The specified module cannot be combined with either \"-f\" or \"-o\" command line utilities"
+		echo "[*] To use the specified module, remove all utility command line switches"
+	       	echo "[*] For help, enter \"--help\""
 	fi
-else
-	echo "Unkown values of read of save"
 fi
