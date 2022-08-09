@@ -15,12 +15,8 @@ This project has been developed so that passive reconnaissance can be conducted 
 
 ## Installation
 
-```bash
-git clone https://github.com/SteveSquared14/OneStopRecon.git
-cd OneStopRecon 
-bash install.sh
-./OneStopRecon.sh
-```
+This version of OneStopRecon is currently still under development - INSTALLATION IS NOT RECOMMENDED AT THIS TIME
+
 ## Usages
 
 Within this tool there are multiple passive reconnaissance techniques implemented into one tool. The techniques that are implemented are mentioned in the “project descriptions”. Usages of each tool are shown down below. 
@@ -41,7 +37,7 @@ Logs:
 * As of the 13th of July 2022, no bugs and problems were detected. (Remediated bugs will be logged as/if they occur in future versions).   
 
 ## Future Developments  
-Version 2.0 developments will consist of: 
+FEATURES UNDER DEVELOPMENT AS OF 9/8/2022: 
  * Reading input from files 
  * Save output of modules to file(s)  
  * Screenshot for Google Maps 
@@ -51,4 +47,4 @@ Version 2.0 developments will consist of:
 
 ## Credits
 
-The following project has been desigend, developed and created by Mohammed Choglay (CTSFO-CryptoChoglay) & Steven Duckett (SteveSquared14). Current Final Year students at the University of Salford studying Computer Science w/ Cyber Security.
+This project has been desigend, developed and created by Mohammed Choglay (CTSFO-CryptoChoglay) & Steven Duckett (SteveSquared14). Current Final Year students at the University of Salford studying Computer Science w/ Cyber Security.
