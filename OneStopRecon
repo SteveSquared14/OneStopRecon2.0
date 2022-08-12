@@ -9,6 +9,7 @@ PathDir="$(pwd)"
 counter=0
 while [ "$#" -gt 0 ]; do
 	selectedTool=$1
+	#echo $selectedTool
 	counter=$((counter+1))
 	if [[ "$counter" == 1 ]]; then
 		if [[ "$selectedTool" == "-f" ]] || [[ "$selectedTool" == "-o" ]]; then
@@ -130,6 +131,24 @@ while [ "$#" -gt 0 ]; do
 				shift
 				shift
 				;;
+			"-u")
+				chosenTool="usernameGenerator"
+				if [ "$2" == "-f" ]; then
+					shift
+				else
+					firstArgForTool="$2"
+					secondArgForTool="$3"
+					thirdArgForTool="$4"
+					shift
+					shift
+					shift
+					shift
+				fi
+				;;
+			"--help")
+				displayHelp=YES
+				shift
+				;;
 			*)
 				echo "Unkown error $chosenTool"
 				doNotRunWarning="YES"
@@ -152,9 +171,6 @@ menu_help () {
         echo -e "========================================================================================================================================"
 
         echo -e "\n"
-        #echo -e "\t-e|--Exploit-DB \t\tVulnerability checker\t\t\t\t\t\t\t[passive]"
-        #echo -e "\t-f|--FacebookDataExtractor \tExracts data from facebook  \t\t\t\t\t\t[passive]"
-        #echo -e " -dBa | --Dorking \t\t\tRun popular dorking searches using Baidu search engine\t\t\t[Passive]"
         echo -e " -b  | --Banner Grabbing \t\tGain details about a system on a network\t\t\t\t[Semi-Passive]"
 	echo -e " -dB | --Dorking \t\t\tRun popular dorking searches using Bing search engine\t\t\t[Passive]"
         echo -e " -dD | --Dorking \t\t\tRun popular dorking searches using Duck Duck Go search engine\t\t[Passive]"
@@ -164,14 +180,17 @@ menu_help () {
         echo -e " -n  | --Name Server Enumeration \tLocating all DNS servers and records for a company\t\t\t[Semi-Passive]"
         echo -e " -s  | --Shodan  \t\t\tIoT devices check\t\t\t\t\t\t\t[Passive]"
         echo -e " -t  | --Text file recon \t\tChecks for intel in Robots.txt & Security.txt of domain\t\t\t[Passive]"
+	echo -e " -u  | --Username Generator \t\t Generate usernames for a user of a domain \t\t\t[Passive]"
         echo -e " -w  | --Whois \t\t\t\tWhois URL check\t\t\t\t\t\t\t\t[Passive]"
 }
 
 #Main execution flow for v2.0 below here
-
-if [[ "$doNotRunWarning" == "YES" ]]; then
+if [[ "$displayHelp" == "YES" ]]; then
+	menu_help
+elif [[ "$doNotRunWarning" == "YES" ]]; then
 	echo "[!] Warning: A tool must be specified before utilies"
 elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
+	#All tools listed below, same execution flow as version 1.0 but with util functions incorporated
 	if [[ $chosenTool == "bannerGrabbing" ]]; then
 		bannerGrab $argForTool
 	elif [[ $chosenTool == "bingDorking" ]]; then
@@ -183,7 +202,7 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
 		metadataUtil $argForTool
 	elif [[ $chosenTool == "googleMaps" ]]; then
-		googleMaps $argForTool
+		googleMaps "$argForTool"
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
 		dnsUtil $argForTool
 	elif [[ $chosenTool == "shodan" ]]; then
@@ -192,10 +211,15 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 		txtFileUtil $argForTool
 	elif [[ $chosenTool == "whoIs" ]]; then
 		whoisUtil $argForTool
+	elif [[ $chosenTool == "usernameGenerator" ]]; then
+		#echo $firstArgForTool
+		#echo $secondArgForTool
+		#echo $thirdArgForTool
+		usernameUtil $firstArgForTool $secondArgForTool $thirdArgForTool
 	fi
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
+	#Only the tools listed below can read from a file
 	if [[ $chosenTool == "whoIs" ]]; then
-		#DEBUGGED AND WORKING AS OF 8/8/2022
 		whoisUtil $fileToRead
 	elif [[ $chosenTool == "txtFileChecks" ]]; then
 		txtFileUtil $fileToRead
@@ -207,6 +231,7 @@ elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 		echo "[*] For help, enter \"--help\""
 	fi
 elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
+	#Only the tools listed below can save/write to a file
 	if [[ "$chosenTool" == "whoIs" ]]; then
 		whoisUtil $argForTool $fileToSaveTo
 	elif [[ $chosenTool == "txtFileChecks" ]]; then
@@ -217,12 +242,16 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
 		metadataUtil $argForTool $fileToSaveTo
 	elif [[ $chosenTool == "bannerGrabbing" ]]; then
 		bannerGrab $argForTool $fileToSaveTo
+	elif [[ $chosenTool == "usernameGenerator" ]]; then	
+		usernameUtil $firstArgForTool $secondArgForTool $thirdArgForTool $fileToSaveTo
+		
 	else
 		echo "[!] The specified module cannot be output to a file"
 		echo "[*] To use the specified module, remove the \"-o\" command line option"
 	       	echo "[*] For help, enter \"--help\""
 	fi
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" == "YES" ]]; then
+	#Tools listed below can read from and save to files
 	if [[ "$chosenTool" == "whoIs" ]]; then
 		whoisUtil $fileToRead $fileToSaveTo
 	elif [[ $chosenTool == "txtFileChecks" ]]; then
