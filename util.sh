@@ -8,7 +8,7 @@ PATH="$(pwd)"
 function whoisUtil(){
 whoisDataInput=$1
 file_ext="$(echo  "$whoisDataInput" | /usr/bin/grep -Eo ".txt")"
-echo "file ext is $file_ext"
+#echo "file ext is $file_ext"
 
 if [ $# -eq 1 ]; then
 
@@ -37,6 +37,29 @@ elif [ $# -gt 1 ]; then
 		echo "Your file has been outputted to $outputFileName"
 	fi
 fi
+}
+
+usernameUtil(){
+	file_ext="$(echo "$1" | /usr/bin/grep -Eo ".txt")"
+
+	if [ $# -eq 1 ]; then
+		#reading from file, output to terminal
+		#tbc once file format confirmed
+		echo "Placeholder"
+	elif [ "$#" -eq 2 ]; then
+		#reading from file, outputting to file
+		#tbc once file format confirmed
+		echo "Placeholder 2"
+	elif [ "$#" -eq 3 ]; then
+		#read from terminal, output to terminal
+		usernameGenerator $1 $2 $3
+	elif [ "$#" -eq 4 ]; then
+		#read from terminal, output to file
+		usernameGenerator $1 $2 $3 >> $4
+		echo "[*] Your file has been outputted to $4"
+	fi
+
+
 }
 
 
@@ -107,11 +130,18 @@ fi
 
 
 function metadataUtil(){
-fileName=$1
-outputFileName=$2
-	    echo "[!]Analysing $fileName"
-            metadataExtraction $fileName >> $outputFileName
-            echo "[!]Analysing Complete" 	    
+if [ "$#" -gt 1 ]; then
+	fileName=($1)
+	outputFilename=$2
+	for file in "${!fileArray[@]}"; do
+		echo "[*] Analysing "${fileArray[file]}"..."
+		metadataExtraction "${fileArray[file]}"
+		echo "[*] Analysis of "${fileArray[file]}" complete..."
+	done
+fi
+#	   echo "[!]Analysing $fileName"
+#          metadataExtraction $fileName >> $outputFileName
+#          echo "[!]Analysing Complete" 	    
 }
 
 function bannerGrabbingUtil(){
