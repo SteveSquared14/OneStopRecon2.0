@@ -216,3 +216,24 @@ usernameGenerator(){
 	echo "Twelth potential email: $firstLetterOfFirstName-$lastName@$domain"	
 	echo ""
 }
+
+gobusterMode(){
+gobusterMode=$1
+target=$2
+wordlist=$3
+
+echo "[*] Executing gobuster"
+echo "[*] Enumarating data for $target"
+echo "===================Extracted Gobuster Infomation For $target==================="
+if [[ $gobusterMode == "dir" ]]; then 
+        gobuster dir -u $target -w $wordlist #--wildcard
+elif [[ $gobusterMode == "dns" ]]; then 
+        gobuster dns -d $target -w $wordlist -t 250 
+elif [[ $gobusterMode == "vhost" ]]; then 
+        gobuster vhost -u $target -w $wordlist
+elif [[ $gobusterMode == "fuzz" ]]; then 
+        pram="?FUZZ="
+        gobuster fuzz -u $target$pram -w $wordlist 
+fi
+}
+
