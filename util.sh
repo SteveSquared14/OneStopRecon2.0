@@ -39,17 +39,17 @@ elif [ $# -gt 1 ]; then
 fi
 }
 
-usernameUtil(){
+function usernameUtil(){
 	file_ext="$(echo "$1" | /usr/bin/grep -Eo ".txt")"
 
 	if [ $# -eq 1 ]; then
 		#reading from file, output to terminal
 		#tbc once file format confirmed
-		echo "Placeholder"
+		:
 	elif [ "$#" -eq 2 ]; then
 		#reading from file, outputting to file
 		#tbc once file format confirmed
-		echo "Placeholder 2"
+		:
 	elif [ "$#" -eq 3 ]; then
 		#read from terminal, output to terminal
 		usernameGenerator $1 $2 $3
@@ -128,7 +128,6 @@ fi
 }
 
 
-
 function metadataUtil(){
 if [ "$#" -gt 1 ]; then
 	fileName=($1)
@@ -144,8 +143,8 @@ fi
 #          echo "[!]Analysing Complete" 	    
 }
 
-function bannerGrabbingUtil(){
 
+function bannerGrabbingUtil(){
 bannerGrabbingInput=$1
 file_ext="$(echo "$bannerGrabbingInput" | /usr/bin/grep -Eo ".txt" )"
 if [ $# -eq 1 ]; then 
@@ -176,6 +175,24 @@ else
 fi
 }
 
+
+function gobusterUtil(){
+mode="$1"
+target="$2"
+wordList="$3"
+fileToSaveTo="$4"
+
+if [ "$#" -eq 3 ]; then
+	gobusterFunc $mode $target $wordList
+elif [ "$#" -eq 4 ]; then
+	gobusterFunc $mode $target $wordList >> $fileToSaveTo
+else
+	echo "[!] Unexpected error occured. Please try again"
+	echo "For help, enter \"--help\""
+fi
+
+
+}
 
 
 #function Testing

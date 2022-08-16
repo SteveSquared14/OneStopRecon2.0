@@ -149,6 +149,54 @@ while [ "$#" -gt 0 ]; do
 				displayHelp=YES
 				shift
 				;;
+			"-gD")
+				chosenTool="gobusterDir"
+				if [ "$2" == "-f" ]; then
+					shift
+				else
+					gobusterTarget="$2"
+					gobusterWordList="$3"
+					shift
+					shift
+					shift
+				fi
+				;;
+			"-gN")
+				chosenTool="gobusterDNS"
+				if [ "$2" == "-f" ]; then
+					shift
+				else
+					gobusterTarget="$2"
+					gobusterWordList="$3"
+					shift
+					shift
+					shift
+				fi
+				;;
+			"-gV")
+				chosenTool="gobusterVHost"
+				if [ "$2" == "-f" ]; then
+					shift
+				else
+					gobusterTarget="$2"
+					gobusterWordList="$3"
+					shift
+					shift
+					shift
+				fi
+				;;
+			"-gF")
+				chosenTool="gobusterFuzz"
+				if [ "$2" == "-f" ]; then
+					shift
+				else
+					gobusterTarget="$2"
+					gobusterWordList="$3"
+					shift
+					shift
+					shift
+				fi
+				;;
 			*)
 				echo "Unkown error $chosenTool"
 				doNotRunWarning="YES"
@@ -199,6 +247,16 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 		Excute_All_Dorkings "-dD" $argForTool
 	elif [[ $chosenTool == "googleDorking" ]]; then
 		Excute_All_Dorkings -dG $argForTool
+	elif [[ $chosenTool == "gobusterDir" ]]; then
+		echo "target is $gobusterTarget"
+		echo "wordList is $gobusterWordList"
+		gobusterUtil "dir" $gobusterTarget $gobusterWordList
+	elif [[ $chosenTool == "gobusterDNS" ]]; then
+		gobusterUtil "dns" $gobusterTarget $gobusterWordList
+	elif [[ $chosenTool == "gobusterVHost" ]]; then
+		gobusterUtil "vhost" $gobusterTarget $gobusterWordList
+	elif [[ $chosenTool == "gobusterFuzz" ]]; then
+		gobusterUtil "fuzz" $gobusterTarget $gobusterWordList
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
 		metadataUtil $argForTool
 	elif [[ $chosenTool == "googleMaps" ]]; then
@@ -212,9 +270,6 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 	elif [[ $chosenTool == "whoIs" ]]; then
 		whoisUtil $argForTool
 	elif [[ $chosenTool == "usernameGenerator" ]]; then
-		#echo $firstArgForTool
-		#echo $secondArgForTool
-		#echo $thirdArgForTool
 		usernameUtil $firstArgForTool $secondArgForTool $thirdArgForTool
 	fi
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
@@ -244,7 +299,14 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
 		bannerGrab $argForTool $fileToSaveTo
 	elif [[ $chosenTool == "usernameGenerator" ]]; then	
 		usernameUtil $firstArgForTool $secondArgForTool $thirdArgForTool $fileToSaveTo
-		
+	elif [[ $chosentool == "gobusterDir" ]]; then
+		gobusterUtil "dir" $gobusterTarget $gobusterWordList $fileToSaveTo
+	elif [[ $chosenTool == "gobusterDNS" ]]; then
+		gobusterUtil "dns" $gobusterTarget $gobusterWordList $fileToSaveTo
+	elif [[ $chosenTool == "gobusterVHost" ]]; then
+		gobusterUtil "vhost" $gobusterTarget $gobusterWordList $fileToSaveTo
+	elif [[ $chosenTool == "gobusterFuzz" ]]; then
+		gobusterUtil "fuzz" $gobusterTarget $gobusterWordList $fileToSaveTo
 	else
 		echo "[!] The specified module cannot be output to a file"
 		echo "[*] To use the specified module, remove the \"-o\" command line option"
