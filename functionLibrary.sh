@@ -90,12 +90,12 @@ googleMaps(){
         placeToOpen=""
         argArray=($1)
         for var in "${!argArray[@]}"; do
-                        if [[ $placeToOpen == "" ]]; then
-                                placeToOpen=${argArray[var]}
-                        else
-                                placeToOpen=$placeToOpen+${argArray[var]}
-                                shift
-                        fi
+        	if [[ $placeToOpen == "" ]]; then
+                     	placeToOpen=${argArray[var]}
+           	else
+         		placeToOpen=$placeToOpen+${argArray[var]}
+                     	shift
+             	fi
         done
         urlAppend="/"
         completeUrl=$urlPrepend$placeToOpen$urlAppend
@@ -217,23 +217,23 @@ usernameGenerator(){
 	echo ""
 }
 
-gobusterMode(){
-gobusterMode=$1
-target=$2
-wordlist=$3
+gobusterFunc(){
+	chosenMode=$1
+	target=$2
+	wordlist=$3
 
-echo "[*] Executing gobuster"
-echo "[*] Enumarating data for $target"
-echo "===================Extracted Gobuster Infomation For $target==================="
-if [[ $gobusterMode == "dir" ]]; then 
-        gobuster dir -u $target -w $wordlist #--wildcard
-elif [[ $gobusterMode == "dns" ]]; then 
-        gobuster dns -d $target -w $wordlist -t 250 
-elif [[ $gobusterMode == "vhost" ]]; then 
-        gobuster vhost -u $target -w $wordlist
-elif [[ $gobusterMode == "fuzz" ]]; then 
-        pram="?FUZZ="
-        gobuster fuzz -u $target$pram -w $wordlist 
-fi
+	echo "[*] Executing gobuster"
+	echo "[*] Enumarating data for $target"
+	echo "===================Extracted Gobuster Infomation For $target==================="
+	if [[ $gobusterMode == "dir" ]]; then 
+		"${binPath}gobuster" dir -u $target -w $wordlist #--wildcard
+	elif [[ $gobusterMode == "dns" ]]; then 
+		"${binPath}gobuster" dns -d $target -w $wordlist -t 250 
+	elif [[ $gobusterMode == "vhost" ]]; then 
+		"${binPath}gobuster" vhost -u $target -w $wordlist
+	elif [[ $gobusterMode == "fuzz" ]]; then 
+		param="?FUZZ="
+		"${binPath}gobuster" fuzz -u $target$param -w $wordlist 
+	fi
 }
 
