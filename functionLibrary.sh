@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/bin/bash 
+
 #Function for each module of the tool
 binPath=/usr/bin/
+
+
 #whois - takes a domain and returns any name servers
 whoIsFunc(){
         domain=$1
@@ -180,10 +183,11 @@ echo "Would you like to check for potential exploits for sever and systems? (Y/N
 read input
 if [[ $input == "Y" || $input == "y" ]]; 
         then
-        serverGreped="$("${binPath}curl" -s -I $searchParam | "${binPath}grep" -E "^Server:" | "${binPath}cut" -d " " -f 2)" 
-        #echo $serverGreped 
-        #test="apache"
-        searchSploitFunc "$serverGreped"
+      ${binPath}curl -sIXGET https://$searchParam/ | ${binPath}grep -vi content-length >> testCurlFile.txt
+	  ${binPath}dos2unix testCurlFile.txt
+	  param="$(${binPath}cat testCurlFile.txt | ${binPath}grep -E "server: " | ${binPath}cut -d " " -f 2)"
+	  ${binPath}rm testCurlFile.txt
+	  ${binPath}searchsploit $param
         elif [[ $input == "N" || $input == "n" ]]; 
         then
                :
@@ -193,7 +197,7 @@ fi
 usernameGenerator(){
 	firstName="$1"
 	lastName="$2"
-	domain="$3"
+	domain="$3":
 	firstLetterOfFirstName="$(echo $firstName | /usr/bin/cut -c1)"
 	firstLetterOfLastName="$(echo $lastName | /usr/bin/cut -c1)"
 	echo "[*] Generating list of usernames..."
@@ -251,14 +255,9 @@ gobusterFunc(){
 
 searchSploitFunc(){
 serverName=$1
-#echo $serverName
-#numOfLines="$( "${binPath}searchsploit" $serverName | "${binPath}wc" -l)"
-#numOfResults=$((numOfLines-5))
 echo "[*] Excuting searchsploit"
 echo "[*] Enumarting possible exploits for $serverName"
 echo "[!] Searchsploit results for $serverName"
-${binPath}searchsploit $serverName
-echo "[!] $numOfResults results found!"
+"${binPath}searchsploit" $serverName
 }
-
-
+searchSploitFunc $1
