@@ -1,4 +1,4 @@
-#!/bin/bashrm
+#!/bin/bash
 #Function for each module of the tool
 binPath=/usr/bin/
 #whois - takes a domain and returns any name servers
@@ -176,6 +176,18 @@ bannerGrab(){
         echo "==================== Summary of curl for "$searchParam" ===================="
         echo " "
         "${binPath}curl" -s -I "$searchParam"
+echo "Would you like to check for potential exploits for sever and systems? (Y/N)"
+read input
+if [[ $input == "Y" || $input == "y" ]]; 
+        then
+        serverGreped="$("${binPath}curl" -s -I $searchParam | "${binPath}grep" -E "^Server:" | "${binPath}cut" -d " " -f 2)" 
+        #echo $serverGreped 
+        #test="apache"
+        searchSploitFunc "$serverGreped"
+        elif [[ $input == "N" || $input == "n" ]]; 
+        then
+               :
+fi
 }
 
 usernameGenerator(){
@@ -236,4 +248,17 @@ gobusterFunc(){
 		"${binPath}gobuster" fuzz -u $target$param -w $wordlist 
 	fi
 }
+
+searchSploitFunc(){
+serverName=$1
+#echo $serverName
+#numOfLines="$( "${binPath}searchsploit" $serverName | "${binPath}wc" -l)"
+#numOfResults=$((numOfLines-5))
+echo "[*] Excuting searchsploit"
+echo "[*] Enumarting possible exploits for $serverName"
+echo "[!] Searchsploit results for $serverName"
+${binPath}searchsploit $serverName
+echo "[!] $numOfResults results found!"
+}
+
 
