@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PATH="$(pwd)"
-. $PATH/functionLibrary.sh 
+. "$PATH"/functionLibrary.sh 
 
 #Reading Files
 
@@ -12,28 +12,28 @@ file_ext="$(echo  "$whoisDataInput" | /usr/bin/grep -Eo ".txt")"
 
 if [ $# -eq 1 ]; then
 
-	if [ $file_ext ];
+	if [ "$file_ext" ];
 	then 
 		echo "[!] Data extracted from $whoisDataInput"
-		while read line;
+		while read -r line;
 		do
-   		whoIsFunc $line
-		done < ${whoisDataInput}
+   		whoIsFunc "$line"
+		done < "${whoisDataInput}"
 	else    
-		whoIsFunc $whoisDataInput
+		whoIsFunc "$whoisDataInput"
 	fi
 elif [ $# -gt 1 ]; then	
 	outputFileName=$2
-	if [ $file_ext  ]; 
+	if [ "$file_ext"  ]; 
 	then
 		echo "[!] Data extracted from $whoisDataInput"
-		while read line;
+		while read -r line;
 		do
-		whoIsFunc $line >> $outputFileName
-		done < ${whoisDataInput} 
+		whoIsFunc "$line" >> "$outputFileName"
+		done < "${whoisDataInput}" 
 		echo "[!]Your file has been outputted to $outputFileName"
 	else
-		whoIsFunc $whoisDataInput >> $outputFileName 
+		whoIsFunc "$whoisDataInput" >> "$outputFileName" 
 		echo "Your file has been outputted to $outputFileName"
 	fi
 fi
@@ -52,10 +52,10 @@ function usernameUtil(){
 		:
 	elif [ "$#" -eq 3 ]; then
 		#read from terminal, output to terminal
-		usernameGenerator $1 $2 $3
+		usernameGenerator "$1" "$2" "$3"
 	elif [ "$#" -eq 4 ]; then
 		#read from terminal, output to file
-		usernameGenerator $1 $2 $3 >> $4
+		usernameGenerator "$1" "$2" "$3" >> "$4"
 		echo "[*] Your file has been outputted to $4"
 	fi
 
@@ -68,28 +68,28 @@ dnsDataInput=$1
 file_ext="$(echo "$dnsDataInput" | /usr/bin/grep -Eo ".txt")"
 
 if [ $# -eq 1 ]; then 
-	if [ $file_ext ];
+	if [ "$file_ext" ];
 	then
 		echo "[!] Data extracted from $dnsDataInput"
-		while read line;
+		while read -r line;
 		do 
-    		dnsCheck $line
-		done < ${dnsDataInput}
+    		dnsCheck "$line"
+		done < "${dnsDataInput}"
 	else
-		dnsCheck $dnsDataInput
+		dnsCheck "$dnsDataInput"
 	fi
 elif [ $# -gt 1 ]; then
 	outputFileName=$2
-	if [ $file_ext ];
+	if [ "$file_ext" ];
 	then 
 		echo "[!] Data extracted from $dnsDataInput"
-		while read line;
+		while read -r line;
 		do
-		dnsCheck $line >> $outputFileName 
-		done < ${dnsDataInput}
+		dnsCheck "$line" >> "$outputFileName" 
+		done < "${dnsDataInput}"
 		echo "[!]Your file has been outputted to $outputFileName"
 	else
-		dnsCheck $dnsDataInput >> $outputFileName 
+		dnsCheck "$dnsDataInput" >> "$outputFileName" 
 		echo "[!]Your file has been outputted to $outputFileName"
 	fi
 fi
@@ -100,76 +100,75 @@ txtFileDataInput=$1
 file_ext="$(echo "$txtFileDataInput" | /usr/bin/grep -Eo ".txt")"
 
 if [ $# -eq 1 ]; then 
-	if [ $file_ext ];
+	if [ "$file_ext" ];
 	then 
 	   	echo "[!] Data extracted from $txtFileDataInput"
-		while read line 
+		while read -r line 
 		do 
-    		txtFileChecks $line
-		done < ${txtFileDataInput}
+    		txtFileChecks "$line"
+		done < "${txtFileDataInput}"
 	else
-		txtFileChecks $txtFileDataInput
+		txtFileChecks "$txtFileDataInput"
 	fi
 elif [ $# -gt 1 ]; then 
 	outputFileName=$2
-	if [ $file_ext ];
+	if [ "$file_ext" ];
 	then 
 		echo "[!] Data extracted from $txtFileDataInput"
-		while read line;
+		while read -r line;
 		do
-		txtFileChecks $line >> $outputFileName
-		done < ${txtFileDataInput}
+		txtFileChecks "$line" >> "$outputFileName"
+		done < "${txtFileDataInput}"
 		echo "[!]Your file has been outputted to $outputFileName"
 	else
-		txtFileChecks $txtFileDataInput >> $outputFileName
+		txtFileChecks "$txtFileDataInput" >> "$outputFileName"
 		echo "[!]Your file has been outputted to $outputFileName"
 	fi
 fi
 }
 
-
-function metadataUtil(){
-if [ "$#" -gt 1 ]; then
-	fileName=($1)
-	outputFilename=$2
-	for file in "${!fileArray[@]}"; do
-		echo "[*] Analysing "${fileArray[file]}"..."
-		metadataExtraction "${fileArray[file]}"
-		echo "[*] Analysis of "${fileArray[file]}" complete..."
-	done
-fi
+#function metadataUtil(){
+#if [ "$#" -gt 1 ]; then
+#	fileName=($1)
+#	outputFilename=$2
+#	for file in "${!fileArray[@]}"; do
+#		echo "[*] Analysing ""${fileArray[file]}""..."
+#		metadataExtraction "${fileArray[file]}"
+#		echo "[*] Analysis of ""${fileArray[file]}"" complete..."
+#	done
+#fi
 #	   echo "[!]Analysing $fileName"
 #          metadataExtraction $fileName >> $outputFileName
 #          echo "[!]Analysing Complete" 	    
-}
+#}
 
 
 function bannerGrabbingUtil(){
 bannerGrabbingInput=$1
 file_ext="$(echo "$bannerGrabbingInput" | /usr/bin/grep -Eo ".txt" )"
 if [ $# -eq 1 ]; then 
-	if [ $file_ext ];
+	if [ "$file_ext" ];
 	then 
 		echo "[!] Data extracted from $bannerGrabbingInput" 
-		while read line
+		while read -r line
 		do	
-		bannerGrab $line 
-        	done < ${bannerGrabbingInput}
+		bannerGrab "$line" 
+        	done < "${bannerGrabbingInput}"
 	else 
-		bannerGrab $bannerGrabbingInput
+		bannerGrab "$bannerGrabbingInput"
 	fi
 elif [ $# -gt 1 ]; then 
 	outputFileName=$2
-	if [ $file_ext ];
+	if [ "$file_ext" ];
 	then 
 		echo "[!] Data extracted from $bannerGrabbingInput"
-		while read line
+		while read -r line
 		do
-		bannerGrab $line >> $outputFileName
-		done < ${bannerGrabbingInput}
+		bannerGrab "$line" >> "$outputFileName"
+		done < "${bannerGrabbingInput}"
 	       	echo "Your file has been outputted to $outputFileName"	
 else 
-	bannerGrab $bannerGrabbingInput >> $outputFileName
+	bannerGrab "$bannerGrabbingInput" >> "$outputFileName"
 	echo "[!]File has been outputted to $outputFileName"
     fi
 fi
@@ -183,9 +182,9 @@ wordList="$3"
 fileToSaveTo="$4"
 
 if [ "$#" -eq 3 ]; then
-	gobusterFunc $mode $target $wordList
+	gobusterFunc "$mode" "$target" "$wordList"
 elif [ "$#" -eq 4 ]; then
-	gobusterFunc $mode $target $wordList >> $fileToSaveTo
+	gobusterFunc "$mode" "$target" "$wordList" >> "$fileToSaveTo"
 else
 	echo "[!] Unexpected error occured. Please try again"
 	echo "For help, enter \"--help\""
@@ -193,14 +192,3 @@ fi
 
 
 }
-
-
-#function Testing
-
-#whoisUtil $1 $2
-#dnsUtil $1 $2
-#txtFileUtil $1 $2
-#metadataUtil $1 $2
-#bannerGrabbingUtil $1 $2
-
-

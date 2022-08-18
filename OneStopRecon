@@ -1,8 +1,7 @@
 #!/bin/bash
 
 PathDir="$(pwd)"
-. $PathDir/dorking.sh
-. $PathDir/functionLibrary.sh
+. "$PathDir"/functionLibrary.sh
 . $PathDir/util.sh
 
 
@@ -240,46 +239,46 @@ elif [[ "$doNotRunWarning" == "YES" ]]; then
 elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 	#All tools listed below, same execution flow as version 1.0 but with util functions incorporated
 	if [[ $chosenTool == "bannerGrabbing" ]]; then
-		bannerGrab $argForTool
+		bannerGrab "$argForTool"
 	elif [[ $chosenTool == "bingDorking" ]]; then
-		Excute_All_Dorkings "-dB" $argForTool
+		dorking.sh "-dB" "$argForTool"
 	elif [[ $chosenTool == "duckDuckGoDorking" ]]; then
-		Excute_All_Dorkings "-dD" $argForTool
+		"$PathDir"/dorking.sh "-dD" "$argForTool"
 	elif [[ $chosenTool == "googleDorking" ]]; then
-		Excute_All_Dorkings -dG $argForTool
+		dorking.sh -dG "$argForTool"
 	elif [[ $chosenTool == "gobusterDir" ]]; then
 		echo "target is $gobusterTarget"
 		echo "wordList is $gobusterWordList"
-		gobusterUtil "dir" $gobusterTarget $gobusterWordList
+		gobusterUtil "dir" "$gobusterTarget" "$gobusterWordList"
 	elif [[ $chosenTool == "gobusterDNS" ]]; then
-		gobusterUtil "dns" $gobusterTarget $gobusterWordList
+		gobusterUtil "dns" "$gobusterTarget" "$gobusterWordList"
 	elif [[ $chosenTool == "gobusterVHost" ]]; then
-		gobusterUtil "vhost" $gobusterTarget $gobusterWordList
+		gobusterUtil "vhost" "$gobusterTarget" "$gobusterWordList"
 	elif [[ $chosenTool == "gobusterFuzz" ]]; then
-		gobusterUtil "fuzz" $gobusterTarget $gobusterWordList
+		gobusterUtil "fuzz" "$gobusterTarget" "$gobusterWordList"
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
-		metadataUtil $argForTool
+		metadataUtil "$argForTool"
 	elif [[ $chosenTool == "googleMaps" ]]; then
 		googleMaps "$argForTool"
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
-		dnsUtil $argForTool
+		dnsUtil "$argForTool"
 	elif [[ $chosenTool == "shodan" ]]; then
-		shodanFunc $argForTool
+		shodanFunc "$argForTool"
 	elif [[ $chosenTool == "txtFileChecks" ]]; then
-		txtFileUtil $argForTool
+		txtFileUtil "$argForTool"
 	elif [[ $chosenTool == "whoIs" ]]; then
-		whoisUtil $argForTool
+		whoisUtil "$argForTool"
 	elif [[ $chosenTool == "usernameGenerator" ]]; then
-		usernameUtil $firstArgForTool $secondArgForTool $thirdArgForTool
+		usernameUtil "$firstArgForTool" "$secondArgForTool" "$thirdArgForTool"
 	fi
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 	#Only the tools listed below can read from a file
 	if [[ $chosenTool == "whoIs" ]]; then
-		whoisUtil $fileToRead
+		whoisUtil "$fileToRead"
 	elif [[ $chosenTool == "txtFileChecks" ]]; then
-		txtFileUtil $fileToRead
+		txtFileUtil "$fileToRead"
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
-		dnsUtil $fileToRead
+		dnsUtil "$fileToRead"
 	else 
 		echo "[!] The specified module cannot take input from a file"
 		echo "[*] To use the specified module, enter one command line argument"
@@ -288,25 +287,25 @@ elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
 	#Only the tools listed below can save/write to a file
 	if [[ "$chosenTool" == "whoIs" ]]; then
-		whoisUtil $argForTool $fileToSaveTo
+		whoisUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "txtFileChecks" ]]; then
-		txtFileUtil $argForTool $fileToSaveTo
+		txtFileUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
-		dnsUtil $argForTool $fileToSaveTo
+		dnsUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
-		metadataUtil $argForTool $fileToSaveTo
+		metadataUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "bannerGrabbing" ]]; then
-		bannerGrab $argForTool $fileToSaveTo
+		bannerGrab "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "usernameGenerator" ]]; then	
-		usernameUtil $firstArgForTool $secondArgForTool $thirdArgForTool $fileToSaveTo
+		usernameUtil "$firstArgForTool" "$secondArgForTool" "$thirdArgForTool" "$fileToSaveTo"
 	elif [[ $chosentool == "gobusterDir" ]]; then
-		gobusterUtil "dir" $gobusterTarget $gobusterWordList $fileToSaveTo
+		gobusterUtil "dir" "$gobusterTarget" "$gobusterWordList" "$fileToSaveTo"
 	elif [[ $chosenTool == "gobusterDNS" ]]; then
-		gobusterUtil "dns" $gobusterTarget $gobusterWordList $fileToSaveTo
+		gobusterUtil "dns" "$gobusterTarget" "$gobusterWordList" "$fileToSaveTo"
 	elif [[ $chosenTool == "gobusterVHost" ]]; then
-		gobusterUtil "vhost" $gobusterTarget $gobusterWordList $fileToSaveTo
+		gobusterUtil "vhost" "$gobusterTarget" "$gobusterWordList" "$fileToSaveTo"
 	elif [[ $chosenTool == "gobusterFuzz" ]]; then
-		gobusterUtil "fuzz" $gobusterTarget $gobusterWordList $fileToSaveTo
+		gobusterUtil "fuzz" "$gobusterTarget" "$gobusterWordList" "$fileToSaveTo"
 	else
 		echo "[!] The specified module cannot be output to a file"
 		echo "[*] To use the specified module, remove the \"-o\" command line option"
@@ -315,15 +314,15 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" == "YES" ]]; then
 	#Tools listed below can read from and save to files
 	if [[ "$chosenTool" == "whoIs" ]]; then
-		whoisUtil $fileToRead $fileToSaveTo
+		whoisUtil "$fileToRead" "$fileToSaveTo"
 	elif [[ $chosenTool == "txtFileChecks" ]]; then
-		txtFileUtil $argForTool $fileToSaveTo
+		txtFileUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
-		dnsUtil $argForTool $fileToSaveTo
+		dnsUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
-		metadataUtil $argForTool $fileToSaveTo
+		metadataUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "bannerGrabbing" ]]; then
-		bannerGrab $argForTool $fileToSaveTo
+		bannerGrab "$argForTool" "$fileToSaveTo"
 	else
 		echo "[!] The specified module cannot be combined with either \"-f\" or \"-o\" command line utilities"
 		echo "[*] To use the specified module, remove all utility command line switches"
