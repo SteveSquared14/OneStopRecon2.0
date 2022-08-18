@@ -179,4 +179,28 @@ bannerGrab(){
         echo "==================== Summary of curl for "$searchParam" ===================="
         echo " "
         "${binPath}curl" -s -I "$searchParam"
+	
+	${binPath}curl -sIXGET https://$searchParam/ | ${binPath}grep -vi content-length > testCurlFile.txt
+	  ${binPath}dos2unix testCurlFile.txt
+	  param="$(${binPath}cat testCurlFile.txt | ${binPath}grep -E "[Ss]erver: " | ${binPath}cut -d " " -f 2)"
+	  ${binPath}rm testCurlFile.txt
+          if [[ $param != "" ]]; 
+          then
+                echo "Would you like to check for potential exploits for sever and systems? (Y/N)"
+                read input
+                if [[ $input == "Y" || $input == "y" ]]; 
+                        then
+                #${binPath}curl -sIXGET https://$searchParam/ | ${binPath}grep -vi content-length > testCurlFile.txt
+                        #  ${binPath}dos2unix testCurlFile.txt
+                        # param="$(${binPath}cat testCurlFile.txt | ${binPath}grep -E "[Ss]erver: " | ${binPath}cut -d " " -f 2)"
+                        #${binPath}rm testCurlFile.txt
+                        #echo "THE PARAM IS: $param"
+                searchSploitFunc $param
+                        elif [[ $input == "N" || $input == "n" ]]; 
+                        then
+                        :     
+                fi
+                else
+                echo "[!] No server found"
+        fi
 }
