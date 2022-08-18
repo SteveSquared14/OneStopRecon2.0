@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/bin/bash 
+
 #Function for each module of the tool
 binPath=/usr/bin/
+
+
 #whois - takes a domain and returns any name servers
 whoIsFunc(){
         domain=$1
-        whoIsOutput="$("${binPath}whois" "$domain")"
+        whoIsOutput="$("${binPath}whois" $domain)"
         nameServers="$(echo "$whoIsOutput" | "${binPath}grep" -E "Name Server: [a-z]")"
 	echo "[*] Executing WhoIs Command..."
         echo "======================= Summary of whois for $domain ======================="
@@ -21,8 +24,8 @@ txtFileChecks(){
         completeUrl=$domainToOpen$urlAppend
 	echo "[*] Retrieving response from robots.txt of chosen domain..."
 	echo "[*] Retrieving response from security.txt of chosen domain..."
-        echo "====================== Summary of robots.txt for ""$domainToOpen"" ===================="
-        "${binPath}wget" -q "$completeUrl"
+        echo "====================== Summary of robots.txt for "$domainToOpen" ===================="
+        "${binPath}wget" -q $completeUrl
         "${binPath}cat" robots.txt
         echo " "
         echo " "
@@ -30,8 +33,8 @@ txtFileChecks(){
         #security.txt
         urlAppend2="/security.txt"
         completeUrl2=$domainToOpen$urlAppend2
-        echo "==================== Summary of security.txt for ""$domainToOpen"" ===================="
-        "${binPath}wget" -q "$completeUrl2"
+        echo "==================== Summary of security.txt for "$domainToOpen" ===================="
+        "${binPath}wget" -q $completeUrl2
         "${binPath}cat" security.txt
         "${binPath}rm" security.*
 }
@@ -46,24 +49,24 @@ dnsCheck(){
 	echo "[*] Executing Dig command on target..."
 	echo "[*] Executing Host command on target..."
 	echo "[*] Executing NSLookUp command on target..."
-        echo "======================= Summary of Dig for ""$1"" ======================="
-        "${binPath}dig" "$1"
-        ipAddr="$("${binPath}dig" "$1" | ${binPath}"grep" -Eo "[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}$")"
+        echo "======================= Summary of Dig for "$1" ======================="
+        "${binPath}dig" $1
+        ipAddr="$("${binPath}dig" $1 | ${binPath}"grep" -Eo "[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}$")"
 
         #grep output of dig, looking for an ip addrr. Pass that to host command
         echo " "
-        echo "==================== Summary of Host for ""$ipAddr"" ===================="
-        "${binPath}host" "$ipAddr"
+        echo "==================== Summary of Host for "$ipAddr" ===================="
+        "${binPath}host" $ipAddr
 
         #name server enumeration - duplicate code atm, need to refine
-        nameServers="$("${binPath}whois" "$1" | "${binPath}grep" -E "Name Server: [a-z]")"
+        nameServers="$("${binPath}whois" $1 | "${binPath}grep" -E "Name Server: [a-z]")"
         dnsNameServersArray=($nameServers)
         echo " "
         echo " "
         echo "=================== Summary for nsLookup of Name Servers ==================="
         for ns in "${!dnsNameServersArray[@]}"; do
                 if [[ $(($ns % 3 )) == "2" ]];then
-                        echo "======================== Summary for ""${dnsNameServersArray[ns]}"" ========================"
+                        echo "======================== Summary for "${dnsNameServersArray[ns]}" ========================"
                         "${binPath}nslookup" "${dnsNameServersArray[ns]}"
                 fi
         done
@@ -75,7 +78,7 @@ nsLookupFunc(){
         nameServersArray=($@)
         for ns in "${!nameServersArray[@]}";do
                 if [[ $(($ns % 3 )) == "2" ]]; then
-                        echo "========== Summary for ""${nameServersArray[ns]}"" =========="
+                        echo "========== Summary for "${nameServersArray[ns]}" =========="
 
                         nslookup "${nameServersArray[ns]}"
                 fi
@@ -101,7 +104,7 @@ googleMaps(){
         completeUrl=$urlPrepend$placeToOpen$urlAppend
 	#echo $completeUrl
 	echo "[*] Opening target address in user's preferred brower..."
-        "${binPath}xdg-open" "$completeUrl"
+        "${binPath}xdg-open" $completeUrl
 }
 
 #facebook/social media
@@ -114,21 +117,21 @@ arrayFiles=("$@")
 for file in "${!arrayFiles[@]}"; do 
         if [ -f "${arrayFiles[file]}" ];
         then
-		echo "[*] Performing metadata extraction on ""${arrayFiles[file]}""..."
+		echo "[*] Performing metadata extraction on "${arrayFiles[file]}"..."
                 file_name="${arrayFiles[file]}"
                 file_ext="$(echo "$file_name" | "${binPath}grep" -Eo "[.][a-z]+")"
-                echo "============================== Metadata Extraction for ""$file_name"" =============================="
-               	echo "File Extension: ""$file_ext"""
-		echo "File Name & Description:" "$(${binPath}"file" "$file_name")"
+                echo "============================== Metadata Extraction for "$file_name" =============================="
+               	echo "File Extension: "$file_ext""
+		echo "File Name & Description:" "$(${binPath}"file" $file_name)"
                 echo " "
-                echo "SHA512 Hash:" "$("${binPath}sha512sum"  "$file_name")"
+                echo "SHA512 Hash:" "$("${binPath}sha512sum"  $file_name)"
                 echo " "
-                echo "Head of Hex Dump:" "$(${binPath}"hexdump" "$file_name" | ${binPath}"head")"
+                echo "Head of Hex Dump:" "$(${binPath}"hexdump" $file_name | ${binPath}"head")"
                 echo " "
 
-                if [ "$file_ext" == ".png" ] || [ "$file_ext" == ".jpg" ] || [ "$file_ext" == ".jpeg" ] || [ "$file_ext" == ".gif" ] || [ "$file_ext" == ".tiff" ] || [ "$file_ext" == ".psd" ];
+                if [ $file_ext == ".png" ] || [ $file_ext == ".jpg" ] || [ $file_ext == ".jpeg" ] || [ $file_ext == ".gif" ] || [ $file_ext == ".tiff" ] || [ $file_ext == ".psd" ];
                 then
-                        exif "$file_name"
+                        exif $file_name
                         echo " "
                         shift
                 else
@@ -136,7 +139,7 @@ for file in "${!arrayFiles[@]}"; do
                         echo " "
                         shift
                 fi
-        else
+        else:
                 echo "[!] Warning: Only files are compatible with this module!"
         fi
 done;
@@ -158,7 +161,7 @@ shodanFunc(){
         done
         completeUrl=$mainUrl$searchParams
 	echo "[*] Opening target URL in user's preferred browser..."
-        xdg-open "$completeUrl"
+        xdg-open $completeUrl
 }
 
 
@@ -168,34 +171,45 @@ bannerGrab(){
         searchParam=$1
 	echo "[*] Executing wget HTTP banner request..."
 	echo "[*] Executing curl HTTP banner request..."
-        echo "==================== Summary of wget for ""$searchParam"" ===================="
+        echo "==================== Summary of wget for "$searchParam" ===================="
         echo " "
         "${binPath}wget" -q -S "$searchParam"
         #"${binPath}rm" index.*
         echo " "
-        echo "==================== Summary of curl for ""$searchParam"" ===================="
+        echo "==================== Summary of curl for "$searchParam" ===================="
         echo " "
         "${binPath}curl" -s -I "$searchParam"
-echo "Would you like to check for potential exploits for sever and systems? (Y/N)"
-read -r input
-if [[ $input == "Y" || $input == "y" ]]; 
-        then
-        serverGreped="$("${binPath}curl" -s -I "$searchParam" | "${binPath}grep" -E "^Server:" | "${binPath}cut" -d " " -f 2)" 
-        #echo $serverGreped 
-        #test="apache"
-        searchSploitFunc "$serverGreped"
-        elif [[ $input == "N" || $input == "n" ]]; 
-        then
-               :
-fi
+        ${binPath}curl -sIXGET https://$searchParam/ | ${binPath}grep -vi content-length > testCurlFile.txt
+	  ${binPath}dos2unix testCurlFile.txt
+	  param="$(${binPath}cat testCurlFile.txt | ${binPath}grep -E "[Ss]erver: " | ${binPath}cut -d " " -f 2)"
+	  ${binPath}rm testCurlFile.txt
+          if [[ $param != "" ]]; 
+          then
+                echo "Would you like to check for potential exploits for sever and systems? (Y/N)"
+                read input
+                if [[ $input == "Y" || $input == "y" ]]; 
+                        then
+                #${binPath}curl -sIXGET https://$searchParam/ | ${binPath}grep -vi content-length > testCurlFile.txt
+                        #  ${binPath}dos2unix testCurlFile.txt
+                        # param="$(${binPath}cat testCurlFile.txt | ${binPath}grep -E "[Ss]erver: " | ${binPath}cut -d " " -f 2)"
+                        #${binPath}rm testCurlFile.txt
+                        #echo "THE PARAM IS: $param"
+                searchSploitFunc $param
+                        elif [[ $input == "N" || $input == "n" ]]; 
+                        then
+                        :     
+                fi
+                else
+                echo "[!] No server found"
+        fi
 }
 
 usernameGenerator(){
 	firstName="$1"
 	lastName="$2"
-	domain="$3"
-	firstLetterOfFirstName="$(echo "$firstName" | /usr/bin/cut -c1)"
-	firstLetterOfLastName="$(echo "$lastName" | /usr/bin/cut -c1)"
+	domain="$3":
+	firstLetterOfFirstName="$(echo $firstName | /usr/bin/cut -c1)"
+	firstLetterOfLastName="$(echo $lastName | /usr/bin/cut -c1)"
 	echo "[*] Generating list of usernames..."
 	echo "[*] Generating list of email addresses..."
 	echo ""
@@ -230,7 +244,7 @@ usernameGenerator(){
 }
 
 gobusterFunc(){
-	gobusterMode=$1
+	chosenMode=$1
 	target=$2
 	wordlist=$3
 
@@ -238,25 +252,22 @@ gobusterFunc(){
 	echo "[*] Enumarating data for $target"
 	echo "===================Extracted Gobuster Infomation For $target==================="
 	if [[ $gobusterMode == "dir" ]]; then 
-		"${binPath}gobuster" dir -u "$target" -w "$wordlist" #--wildcard
+		"${binPath}gobuster" dir -u $target -w $wordlist #--wildcard
 	elif [[ $gobusterMode == "dns" ]]; then 
-		"${binPath}gobuster" dns -d "$target" -w "$wordlist" -t 250 
+		"${binPath}gobuster" dns -d $target -w $wordlist -t 250 
 	elif [[ $gobusterMode == "vhost" ]]; then 
-		"${binPath}gobuster" vhost -u "$target" -w "$wordlist"
+		"${binPath}gobuster" vhost -u $target -w $wordlist
 	elif [[ $gobusterMode == "fuzz" ]]; then 
 		param="?FUZZ="
-		"${binPath}gobuster" fuzz -u "$target""$param" -w "$wordlist" 
+		"${binPath}gobuster" fuzz -u $target$param -w $wordlist 
 	fi
 }
 
 searchSploitFunc(){
 serverName=$1
-#echo $serverName
-numOfLines="$( "${binPath}searchsploit" "$serverName" | "${binPath}wc" -l)"
-numOfResults=$((numOfLines-5))
 echo "[*] Excuting searchsploit"
 echo "[*] Enumarting possible exploits for $serverName"
 echo "[!] Searchsploit results for $serverName"
-${binPath}searchsploit "$serverName"
-echo "[!] $numOfResults results found!"
+"${binPath}searchsploit" $serverName
 }
+#bannerGrab $1
