@@ -190,12 +190,8 @@ bannerGrab(){
                 read input
                 if [[ $input == "Y" || $input == "y" ]]; 
                         then
-                #${binPath}curl -sIXGET https://$searchParam/ | ${binPath}grep -vi content-length > testCurlFile.txt
-                        #  ${binPath}dos2unix testCurlFile.txt
-                        # param="$(${binPath}cat testCurlFile.txt | ${binPath}grep -E "[Ss]erver: " | ${binPath}cut -d " " -f 2)"
-                        #${binPath}rm testCurlFile.txt
-                        #echo "THE PARAM IS: $param"
-                searchSploitFunc $param
+                		searchSploitFunc $param
+				
                         elif [[ $input == "N" || $input == "n" ]]; 
                         then
                         :     
