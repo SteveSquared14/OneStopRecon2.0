@@ -244,7 +244,7 @@ usernameGenerator(){
 }
 
 gobusterFunc(){
-	chosenMode=$1
+	gobusterMode=$1
 	target=$2
 	wordlist=$3
 
@@ -252,14 +252,13 @@ gobusterFunc(){
 	echo "[*] Enumarating data for $target"
 	echo "===================Extracted Gobuster Infomation For $target==================="
 	if [[ $gobusterMode == "dir" ]]; then 
-		"${binPath}gobuster" dir -u $target -w $wordlist #--wildcard
+		"${binPath}gobuster" dir -u "http://www.$target" -w $wordlist --wildcard
 	elif [[ $gobusterMode == "dns" ]]; then 
-		"${binPath}gobuster" dns -d $target -w $wordlist -t 250 
+		"${binPath}gobuster" dns -d $target -w $wordlist  
 	elif [[ $gobusterMode == "vhost" ]]; then 
-		"${binPath}gobuster" vhost -u $target -w $wordlist
-	elif [[ $gobusterMode == "fuzz" ]]; then 
-		param="?FUZZ="
-		"${binPath}gobuster" fuzz -u $target$param -w $wordlist 
+		"${binPath}gobuster" vhost -u "https://$target" -w $wordlist
+	elif [[ $gobusterMode == "fuzz" ]]; then :
+		"${binPath}gobuster" fuzz -u "$target/FUZZ" -w $wordlist 
 	fi
 }
 
