@@ -262,6 +262,16 @@ gobusterFunc(){
 	fi
 }
 
+socialMediaCheck(){
+username=$1
+
+echo "[!]This may take few minutes dependning on that amount of results found"
+echo "["] Finding results for $1"
+echo "======================= Possible Accounts For $1 ======================="
+sherlock $1
+
+}
+
 searchSploitFunc(){
 serverName=$1
 echo "[*] Excuting searchsploit"
@@ -269,4 +279,5 @@ echo "[*] Enumarting possible exploits for $serverName"
 echo "[!] Searchsploit results for $serverName"
 "${binPath}searchsploit" $serverName
 }
+
 #bannerGrab $1
