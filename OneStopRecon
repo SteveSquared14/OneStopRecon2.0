@@ -257,7 +257,7 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 	elif [[ $chosenTool == "gobusterFuzz" ]]; then
 		gobusterUtil "fuzz" "$gobusterTarget" "$gobusterWordList"
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
-		metadataUtil "$argForTool"
+		metadataExtraction "$argForTool"
 	elif [[ $chosenTool == "googleMaps" ]]; then
 		googleMaps "$argForTool"
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
@@ -293,7 +293,7 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
 		dnsUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
-		metadataUtil "$argForTool" "$fileToSaveTo"
+		metadataExtraction "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "bannerGrabbing" ]]; then
 		bannerGrab "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "usernameGenerator" ]]; then	
@@ -320,7 +320,7 @@ elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" == "YES" ]]; then
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
 		dnsUtil "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "metadataExtraction" ]]; then
-		metadataUtil "$argForTool" "$fileToSaveTo"
+		metadataExtraction "$argForTool" "$fileToSaveTo"
 	elif [[ $chosenTool == "bannerGrabbing" ]]; then
 		bannerGrab "$argForTool" "$fileToSaveTo"
 	else
