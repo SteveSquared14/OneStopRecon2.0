@@ -126,8 +126,34 @@ for file in "${!arrayFiles[@]}"; do
                 echo " "
                 echo "SHA512 Hash:" "$("${binPath}sha512sum"  $file_name)"
                 echo " "
-                echo "Head of Hex Dump:" "$(${binPath}"hexdump" $file_name | ${binPath}"head")"
-                echo " "
+                echo "Would you like to display the file in hex format(h) or binary format(b) (h/b)"
+                read input 
+                
+                if [[ $input == "h" || $input == "H" ]]; 
+                then
+                echo "Would you like the full version of the hexdump? if not the head of hexdump will be outputted (Y/N)"
+                read input
+                if [[ $input == "y" || $input == "Y" ]];
+                then
+						echo "$(${binPath}"xxd" $file_name)"
+						echo " "
+				else
+						echo "$(${binPath}"xxd" $file_name | ${binPath}"head")"
+						echo " "
+					fi
+                elif [[ $input == "b" || $input == "B" ]];
+                then
+                echo "Would you like the full version of the binary output? if not the head of the binary will be outputted (Y/N)"
+                read input
+                if [[ $input == "y" || $input == "Y" ]]; 
+                then
+						echo "$(${binPath}"xxd" -b $file_name)"
+						echo " "
+				else
+						echo "$(${binPath}"xxd" -b $file_name | ${binPath}"head")"
+						echo " "
+				fi
+            fi  
 
                 if [ $file_ext == ".png" ] || [ $file_ext == ".jpg" ] || [ $file_ext == ".jpeg" ] || [ $file_ext == ".gif" ] || [ $file_ext == ".tiff" ] || [ $file_ext == ".psd" ];
                 then
@@ -139,7 +165,7 @@ for file in "${!arrayFiles[@]}"; do
                         echo " "
                         shift
                 fi
-        else:
+        else
                 echo "[!] Warning: Only files are compatible with this module!"
         fi
 done;
@@ -266,7 +292,7 @@ socialMediaCheck(){
 username=$1
 
 echo "[!]This may take few minutes dependning on that amount of results found"
-echo "["] Finding results for $1"
+echo "[*] Finding results for $1"
 echo "======================= Possible Accounts For $1 ======================="
 sherlock $1
 
