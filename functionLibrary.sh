@@ -215,11 +215,6 @@ bannerGrab(){
                 read input
                 if [[ $input == "Y" || $input == "y" ]]; 
                         then
-                #${binPath}curl -sIXGET https://$searchParam/ | ${binPath}grep -vi content-length > testCurlFile.txt
-                        #  ${binPath}dos2unix testCurlFile.txt
-                        # param="$(${binPath}cat testCurlFile.txt | ${binPath}grep -E "[Ss]erver: " | ${binPath}cut -d " " -f 2)"
-                        #${binPath}rm testCurlFile.txt
-                        #echo "THE PARAM IS: $param"
                 searchSploitFunc $param
                         elif [[ $input == "N" || $input == "n" ]]; 
                         then
@@ -236,9 +231,17 @@ usernameGenerator(){
 	domain="$3":
 	firstLetterOfFirstName="$(echo $firstName | /usr/bin/cut -c1)"
 	firstLetterOfLastName="$(echo $lastName | /usr/bin/cut -c1)"
+	
+	if [[ $# -eq 2 ]]; then 
 	echo "[*] Generating list of usernames..."
+	echo ""
+	elif [[ $# -eq  3 ]]; then
+    echo "[*] Generating list of usernames..."
 	echo "[*] Generating list of email addresses..."
 	echo ""
+	fi 
+	
+	if [[ $# -eq 2 || $# -eq 3 ]]; then 
 	echo "============================== Usernames ============================="
 	echo "First potential username: $firstName.$lastName"
 	echo "Second potential username: $firstName$lastName"
@@ -253,6 +256,9 @@ usernameGenerator(){
 	echo "Eleventh potential username: $firstName-$firstLetterOfLastName"
 	echo "Twelth potential username: $firstLetterOfFirstName-$lastName"	
 	echo ""
+	fi
+	
+	if [[ $# -eq 3 ]]; then
 	echo "=========================== Email Addresses =========================="
 	echo "First potential email: $firstName.$lastName@$domain"
 	echo "Second potential email: $firstName$lastName@$domain"
@@ -267,6 +273,28 @@ usernameGenerator(){
 	echo "Eleventh potential email: $firstName-$firstLetterOfLastName@$domain"
 	echo "Twelth potential email: $firstLetterOfFirstName-$lastName@$domain"	
 	echo ""
+	fi
+	
+	echo "Would you like to cross refrence the possible usernames with live social media accounts (Y/N)"
+	read input 
+	
+	if [[ $input == "Y" || $input == "y" ]]; then 
+		
+		userNames=( "$firstName.$lastName" "$firstName$lastName" "$firstLetterOfFirstName$lastName" 
+		"$firstLetterOfFirstName.$lastName" "$firstName$firstLetterOfLastName" 
+		"$firstName.$firstLetterOfLastName" "$firstName_$lastName" "$firstName_$firstLetterOfLastName" 
+		"$firstLetterOfFirstName_$lastName""$firstName-$lastName" "$firstName-$firstLetterOfLastName" 
+		"$firstLetterOfFirstName-$lastName" )
+		
+		for i in "${userNames[@]}"
+		do	
+				socialMediaCheck $i
+		done
+				
+		
+	else 
+		:
+	fi
 }
 
 gobusterFunc(){
@@ -306,4 +334,4 @@ echo "[!] Searchsploit results for $serverName"
 "${binPath}searchsploit" $serverName
 }
 
-#bannerGrab $1
+usernameGenerator $1 $2 $3
