@@ -39,9 +39,6 @@ txtFileChecks(){
         "${binPath}rm" security.*
 }
 
-#exploitDB
-#scrapped until version 2 of tool in progress
-
 #DNS enumeration
 #Commands to use - dig, host, nslookup
 dnsCheck(){
@@ -228,70 +225,67 @@ bannerGrab(){
 usernameGenerator(){
 	firstName="$1"
 	lastName="$2"
-	domain="$3":
+	domain="$3"
 	firstLetterOfFirstName="$(echo $firstName | /usr/bin/cut -c1)"
 	firstLetterOfLastName="$(echo $lastName | /usr/bin/cut -c1)"
 	
-	if [[ $# -eq 2 ]]; then 
-	echo "[*] Generating list of usernames..."
+	#if [[ $# -eq 2 ]]; then 
+	#        echo "[*] Generating a list of usernames..."
+	#        echo ""
+	#elif [[ $# -eq  3 ]]; then
+        #        echo "[*] Generating a list of usernames..."
+	#        echo "[*] Generating a list of email addresses..."
+	#        echo ""
+	#fi 
+
+        echo "[*] Generating a list of usernames..."
+        echo "[*] Generating a list of email addresses..."
 	echo ""
-	elif [[ $# -eq  3 ]]; then
-    echo "[*] Generating list of usernames..."
-	echo "[*] Generating list of email addresses..."
-	echo ""
-	fi 
-	
 	if [[ $# -eq 2 || $# -eq 3 ]]; then 
-	echo "============================== Usernames ============================="
-	echo "First potential username: $firstName.$lastName"
-	echo "Second potential username: $firstName$lastName"
-	echo "Third potential username: $firstLetterOfFirstName$lastName"
-	echo "Fourth potential username: $firstLetterOfFirstName.$lastName"
-	echo "Fifth potential username: $firstName$firstLetterOfLastName"
-	echo "Sixth potential username: $firstName.$firstLetterOfLastName"
-	echo "Seventh potential username: $firstName"_"$lastName"
-	echo "Eighth potential username: $firstName"_"$firstLetterOfLastName"
-	echo "Nineth potential username: $firstLetterOfFirstName"_"$lastName"
-	echo "Tenth potential username: $firstName-$lastName"
-	echo "Eleventh potential username: $firstName-$firstLetterOfLastName"
-	echo "Twelth potential username: $firstLetterOfFirstName-$lastName"	
-	echo ""
+	        echo "============================== Usernames ============================="
+	        echo "First potential username: $firstName.$lastName"
+	        echo "Second potential username: $firstName$lastName"
+                echo "Third potential username: $firstLetterOfFirstName$lastName"
+                echo "Fourth potential username: $firstLetterOfFirstName.$lastName"
+                echo "Fifth potential username: $firstName$firstLetterOfLastName"
+                echo "Sixth potential username: $firstName.$firstLetterOfLastName"
+                echo "Seventh potential username: $firstName"_"$lastName"
+                echo "Eighth potential username: $firstName"_"$firstLetterOfLastName"
+                echo "Nineth potential username: $firstLetterOfFirstName"_"$lastName"
+                echo "Tenth potential username: $firstName-$lastName"
+                echo "Eleventh potential username: $firstName-$firstLetterOfLastName"
+                echo "Twelth potential username: $firstLetterOfFirstName-$lastName"	
+                echo ""
 	fi
 	
 	if [[ $# -eq 3 ]]; then
-	echo "=========================== Email Addresses =========================="
-	echo "First potential email: $firstName.$lastName@$domain"
-	echo "Second potential email: $firstName$lastName@$domain"
-	echo "Third potential email: $firstLetterOfFirstName$lastName@$domain"
-	echo "Fourth potential email: $firstLetterOfFirstName.$lastName@$domain"
-	echo "Fifth potential email: $firstName$firstLetterOfLastName@$domain"
-	echo "Sixth potential email: $firstName.$firstLetterOfLastName@$domain"
-	echo "Seventh potential email: $firstName"_"$lastName@$domain"
-	echo "Eighth potential email: $firstName"_"$firstLetterOfLastName@$domain"
-	echo "Nineth potential email: $firstLetterOfFirstName"_"$lastName@$domain"
-	echo "Tenth potential email: $firstName-$lastName@$domain"
-	echo "Eleventh potential email: $firstName-$firstLetterOfLastName@$domain"
-	echo "Twelth potential email: $firstLetterOfFirstName-$lastName@$domain"	
-	echo ""
+                echo "=========================== Email Addresses =========================="
+                echo "First potential email: $firstName.$lastName@$domain"
+                echo "Second potential email: $firstName$lastName@$domain"
+                echo "Third potential email: $firstLetterOfFirstName$lastName@$domain"
+                echo "Fourth potential email: $firstLetterOfFirstName.$lastName@$domain"
+                echo "Fifth potential email: $firstName$firstLetterOfLastName@$domain"
+                echo "Sixth potential email: $firstName.$firstLetterOfLastName@$domain"
+                echo "Seventh potential email: $firstName"_"$lastName@$domain"
+                echo "Eighth potential email: $firstName"_"$firstLetterOfLastName@$domain"
+                echo "Nineth potential email: $firstLetterOfFirstName"_"$lastName@$domain"
+                echo "Tenth potential email: $firstName-$lastName@$domain"
+                echo "Eleventh potential email: $firstName-$firstLetterOfLastName@$domain"
+                echo "Twelth potential email: $firstLetterOfFirstName-$lastName@$domain"	
+                echo ""
 	fi
-	
+        echo ""
 	echo "Would you like to cross refrence the possible usernames with live social media accounts (Y/N)"
-	read input 
-	
+        read input 
 	if [[ $input == "Y" || $input == "y" ]]; then 
-		
-		userNames=( "$firstName.$lastName" "$firstName$lastName" "$firstLetterOfFirstName$lastName" 
+	        userNames=( "$firstName.$lastName" "$firstName$lastName" "$firstLetterOfFirstName$lastName" 
 		"$firstLetterOfFirstName.$lastName" "$firstName$firstLetterOfLastName" 
 		"$firstName.$firstLetterOfLastName" "$firstName_$lastName" "$firstName_$firstLetterOfLastName" 
 		"$firstLetterOfFirstName_$lastName""$firstName-$lastName" "$firstName-$firstLetterOfLastName" 
 		"$firstLetterOfFirstName-$lastName" )
-		
-		for i in "${userNames[@]}"
-		do	
+		for i in "${userNames[@]}"; do	
 				socialMediaCheck $i
 		done
-				
-		
 	else 
 		:
 	fi
@@ -317,21 +311,21 @@ gobusterFunc(){
 }
 
 socialMediaCheck(){
-username=$1
+        username=$1
 
-echo "[!]This may take few minutes dependning on that amount of results found"
-echo "[*] Finding results for $1"
-echo "======================= Possible Accounts For $1 ======================="
-sherlock $1
+        echo "[!]This may take few minutes dependning on that amount of results found"
+        echo "[*] Finding results for $1"
+        echo "======================= Possible Accounts For $1 ======================="
+        sherlock $1
 
+        }
+
+        searchSploitFunc(){
+        serverName=$1
+        echo "[*] Excuting searchsploit"
+        echo "[*] Enumarting possible exploits for $serverName"
+        echo "[!] Searchsploit results for $serverName"
+        "${binPath}searchsploit" $serverName
 }
 
-searchSploitFunc(){
-serverName=$1
-echo "[*] Excuting searchsploit"
-echo "[*] Enumarting possible exploits for $serverName"
-echo "[!] Searchsploit results for $serverName"
-"${binPath}searchsploit" $serverName
-}
-
-usernameGenerator $1 $2 $3
+#usernameGenerator $1 $2 $3

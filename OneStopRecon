@@ -2,13 +2,15 @@
 
 PathDir="$(pwd)"
 . "$PathDir"/functionLibrary.sh
-. $PathDir/util.sh
+. "$PathDir"/helpMenu.sh
+. "$PathDir"/util.sh
 
 
 counter=0
 while [ "$#" -gt 0 ]; do
 	selectedTool=$1
-	#echo $selectedTool
+	helpTest="$(echo $selectedTool | /usr/bin/cut -c 1-6)"
+	helpTool="$(echo $selectedTool | /usr/bin/cut -c 8-30)"
 	counter=$((counter+1))
 	if [[ "$counter" == 1 ]]; then
 		if [[ "$selectedTool" == "-f" ]] || [[ "$selectedTool" == "-o" ]]; then
@@ -144,10 +146,11 @@ while [ "$#" -gt 0 ]; do
 					shift
 				fi
 				;;
-			"--help")
-				displayHelp=YES
-				shift
-				;;
+			#"--help")
+			#		displayHelp=YES
+			#	helpFunc="$helpTool"
+			#	shift
+			#	;;
 			"-gD")
 				chosenTool="gobusterDir"
 				if [ "$2" == "-f" ]; then
@@ -197,43 +200,64 @@ while [ "$#" -gt 0 ]; do
 				fi
 				;;
 			*)
-				echo "Unkown error $chosenTool"
-				doNotRunWarning="YES"
-				shift
-				;;
+				if [[ "$helpTest" == "--help" ]]; then
+					displayHelp=YES
+					helpFunc="$helpTool"
+					shift
+				else
+					echo "Unkown error $chosenTool"
+					doNotRunWarning="YES"
+					shift
+				fi
 		esac
 	fi
 done
 
-#Help function  to display usages
-menu_help () {
-        echo -e "========================================================================================================================================"
-       echo -e "" \                      "\t\t\t\t\t\t  ___             ____  _              ____                      \n" \
-                                         "\t\t\t\t\t\t / _ \ _ __   ___/ ___|| |_ ___  _ __ |  _ \ ___  ___ ___  _ __  \n" \
-                                         "\t\t\t\t\t\t| | | | '_ \ / _ \___ \| __/ _ \| '_ \| |_) / _ \/ __/ _ \| '_ \ \n" \
-                                         "\t\t\t\t\t\t| |_| | | | |  __/___) | || (_) | |_) |  _ <  __/ (_| (_) | | | |\n" \
-                                         "\t\t\t\t\t\t \___/|_| |_|\___|____/ \__\___/| .__/|_| \_\___|\___\___/|_| |_|\n" \
-                                         "\t\t\t\t\t\t                                |_|                              \n" \
-					 ""
-        echo -e "========================================================================================================================================"
-
-        echo -e "\n"
-        echo -e " -b  | --Banner Grabbing \t\tGain details about a system on a network\t\t\t\t[Semi-Passive]"
-	echo -e " -dB | --Dorking \t\t\tRun popular dorking searches using Bing search engine\t\t\t[Passive]"
-        echo -e " -dD | --Dorking \t\t\tRun popular dorking searches using Duck Duck Go search engine\t\t[Passive]"
-        echo -e " -dG | --Dorking \t\t\tRun popular dorking searches using Google search engine\t\t\t[Passive]"
-        echo -e " -M  | --MetaDataExtractor\t\tExracts data from files\t\t\t\t\t\t\t[Passive]"
-        echo -e " -m  | --Google Map Request\t\tOpens google map to inputted location\t\t\t\t\t[Passive]"
-        echo -e " -n  | --Name Server Enumeration \tLocating all DNS servers and records for a company\t\t\t[Semi-Passive]"
-        echo -e " -s  | --Shodan  \t\t\tIoT devices check\t\t\t\t\t\t\t[Passive]"
-        echo -e " -t  | --Text file recon \t\tChecks for intel in Robots.txt & Security.txt of domain\t\t\t[Passive]"
-	echo -e " -u  | --Username Generator \t\t Generate usernames for a user of a domain \t\t\t[Passive]"
-        echo -e " -w  | --Whois \t\t\t\tWhois URL check\t\t\t\t\t\t\t\t[Passive]"
-}
-
 #Main execution flow for v2.0 below here
 if [[ "$displayHelp" == "YES" ]]; then
-	menu_help
+	if [[ "$helpFunc" == "" ]]; then
+		echo "[*] Printing help summary for OneStopRecon"
+		helpSummary
+	elif [[ "$helpFunc" == "bannerGrab" ]]; then
+		echo "[*] Printing detailed help for Banner Grabbing module"
+		bannerGrabHelp
+	elif [[ "$helpFunc" == "dorking" ]]; then
+		echo "[*] Printing detailed help for Dorking module"
+		dorkingHelp
+	elif [[ "$helpFunc" == "dnsEnumeration" ]]; then	
+		echo "[*] Printing detailed help for Name Server Enumeration module"
+		dnsHelp
+	elif [[ "$helpFunc" == "goBuster" ]]; then	
+		echo "[*] Printing detailed help for Go Buster module"
+		gobusterHelp
+	elif [[ "$helpFunc" == "googleMaps" ]]; then
+		echo "[*] Printing detailed help for Google Maps module"
+		googleMapsHelp
+	elif [[ "$helpFunc" == "metadata" ]]; then	
+		echo "[*] Printing detailed help for Metadata Extraction module"
+		metadataExtractHelp
+	elif [[ "$helpFunc" == "searchsploit" ]]; then
+		echo "[*] Printing detailed help for Searchsploit module"	
+		searchSploitHelp
+	elif [[ "$helpFunc" == "shodan" ]]; then
+		echo "[*] Printing detailed help for Shodan module"
+		shodanHelp
+	elif [[ "$helpFunc" == "socialMedia" ]]; then	
+		echo "[*] Printing detailed help for Social Media Discovery"
+		socialMediaHelp
+	elif [[ "$helpFunc" == "textFileChecks" ]]; then	
+		echo "[*] Printing detailed help for Text File Check module"
+		txtCheckHelp
+	elif [[ "$helpFunc" == "usernameGen" ]]; then	
+		echo "[*] Printing detailed help for Username Generation module"
+		usernameGenHelp
+	elif [[ "$helpFunc" == "whoIs" ]]; then	
+		echo "[*] Printing detailed help for WhoIs module"
+		whoIsHelp
+	else
+		echo -e "[!] Warning: The help option you specified does not exist, for a brief summary use \"--help\""
+		defaultHelp
+	fi 
 elif [[ "$doNotRunWarning" == "YES" ]]; then
 	echo "[!] Warning: A tool must be specified before utilies"
 elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
@@ -280,7 +304,8 @@ elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" != "YES" ]]; then
 	elif [[ $chosenTool == "dnsEnumeration" ]]; then
 		dnsUtil "$fileToRead"
 	else 
-		echo "[!] The specified module cannot take input from a file"
+		#echo "[!] The specified module cannot take input from a file"
+		echo "[!] The specified module cannot be output to a file"
 		echo "[*] To use the specified module, enter one command line argument"
 		echo "[*] For help, enter \"--help\""
 	fi
@@ -307,9 +332,10 @@ elif [[ "$readFromFile" != "YES" ]] && [[ "$saveToFile" == "YES" ]];then
 	elif [[ $chosenTool == "gobusterFuzz" ]]; then
 		gobusterUtil "fuzz" "$gobusterTarget" "$gobusterWordList" "$fileToSaveTo"
 	else
-		echo "[!] The specified module cannot be output to a file"
+		#echo "[!] The specified module cannot be output to a file"
+		echo "[!] The specified module cannot take input from a file"
 		echo "[*] To use the specified module, remove the \"-o\" command line option"
-	       	echo "[*] For help, enter \"--help\""
+	    echo "[*] For help, enter \"--help\""
 	fi
 elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" == "YES" ]]; then
 	#Tools listed below can read from and save to files
@@ -326,6 +352,6 @@ elif [[ "$readFromFile" == "YES" ]] && [[ "$saveToFile" == "YES" ]]; then
 	else
 		echo "[!] The specified module cannot be combined with either \"-f\" or \"-o\" command line utilities"
 		echo "[*] To use the specified module, remove all utility command line switches"
-	       	echo "[*] For help, enter \"--help\""
+	    echo "[*] For help, enter \"--help\""
 	fi
 fi
