@@ -42,15 +42,7 @@ fi
 function usernameUtil(){
 	file_ext="$(echo "$1" | /usr/bin/grep -Eo ".txt")"
 
-	if [ $# -eq 1 ]; then
-		#reading from file, output to terminal
-		#tbc once file format confirmed
-		:
-	elif [ "$#" -eq 2 ]; then
-		#reading from file, outputting to file
-		#tbc once file format confirmed
-		:
-	elif [ "$#" -eq 3 ]; then
+	if [ "$#" -eq 3 ]; then
 		#read from terminal, output to terminal
 		usernameGenerator "$1" "$2" "$3"
 	elif [ "$#" -eq 4 ]; then
