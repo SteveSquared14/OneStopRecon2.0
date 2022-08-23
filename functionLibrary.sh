@@ -26,17 +26,25 @@ txtFileChecks(){
 	echo "[*] Retrieving response from security.txt of chosen domain..."
         echo "====================== Summary of robots.txt for "$domainToOpen" ===================="
         "${binPath}wget" -q $completeUrl
-        "${binPath}cat" robots.txt
+        if [[ -f "robots.txt" ]]; then 
+				"${binPath}cat" robots.txt
+				"${binPath}rm" robots.*
+		else 
+				echo "[!] $domainToOpen dose not contain robots.txt"
+		fi
         echo " "
         echo " "
-        "${binPath}rm" robots.*
         #security.txt
         urlAppend2="/security.txt"
         completeUrl2=$domainToOpen$urlAppend2
         echo "==================== Summary of security.txt for "$domainToOpen" ===================="
         "${binPath}wget" -q $completeUrl2
-        "${binPath}cat" security.txt
-        "${binPath}rm" security.*
+        if [[ -f "security.txt" ]]; then
+				"${binPath}cat" security.txt
+				"${binPath}rm" security.*
+		else	
+				echo "[!] $domainToOpen dose not contain security.txt"
+	    fi
 }
 
 #DNS enumeration

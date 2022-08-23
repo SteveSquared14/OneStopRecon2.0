@@ -181,6 +181,17 @@ else
 	echo "[!] Unexpected error occured. Please try again"
 	echo "For help, enter \"--help\""
 fi
-
-
 }
+
+fileCheckUtil(){
+	fileName=$1
+	
+	if [[ -f $fileName ]]; then 
+		   >> $fileName
+		   #echo "File Exists"
+	else
+		   touch $fileName
+		   #echo "New File Made"
+		   >> $fileName
+    fi
+	}
