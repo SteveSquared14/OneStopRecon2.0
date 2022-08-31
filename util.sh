@@ -7,12 +7,12 @@ PATH="$(pwd)"
 
 function whoisUtil(){
 whoisDataInput=$1
-file_ext="$(echo  "$whoisDataInput" | /usr/bin/grep -Eo ".txt")"
-#echo "file ext is $file_ext"
+echo $whoisDataInput 
+fileExt="$(echo  "$whoisDataInput" | /usr/bin/grep -Eo ".txt")"
+#echo "file ext is $fileExt"
 
 if [ $# -eq 1 ]; then
-
-	if [ "$file_ext" ];
+	if [ "$fileExt" == ".txt" ];
 	then 
 		echo "[!] Data extracted from $whoisDataInput"
 		while read -r line;
@@ -24,23 +24,30 @@ if [ $# -eq 1 ]; then
 	fi
 elif [ $# -gt 1 ]; then	
 	outputFileName=$2
-	if [ "$file_ext"  ]; 
+	if [ "$fileExt" == ".txt" ];
 	then
 		echo "[!] Data extracted from $whoisDataInput"
 		while read -r line;
 		do
-		whoIsFunc "$line" >> "$outputFileName"
-		done < "${whoisDataInput}" 
-		echo "[!]Your file has been outputted to $outputFileName"
-	else
-		whoIsFunc "$whoisDataInput" >> "$outputFileName" 
-		echo "Your file has been outputted to $outputFileName"
+			if [[ -f $outputFileName ]]; then 
+					whoIsFunc "$line" >> "$outputFileName"
+					#echo "File Exists"
+			else
+		   			touch $outputFileName
+					#echo "New File Made"
+					whoIsFunc "$line" > "$outputFileName"
+			fi
+					done < "${whoisDataInput}" 
+			
+			echo "[!]Your file has been outputted to $outputFileName"
+	else 
+		echo "Incompatible read file used"
 	fi
 fi
 }
 
 function usernameUtil(){
-	file_ext="$(echo "$1" | /usr/bin/grep -Eo ".txt")"
+	fileExt="$(echo "$1" | /usr/bin/grep -Eo ".txt")"
 
 	if [ "$#" -eq 3 ]; then
 		#read from terminal, output to terminal
@@ -57,10 +64,10 @@ function usernameUtil(){
 
 function dnsUtil(){
 dnsDataInput=$1
-file_ext="$(echo "$dnsDataInput" | /usr/bin/grep -Eo ".txt")"
+fileExt="$(echo "$dnsDataInput" | /usr/bin/grep -Eo ".txt")"
 
 if [ $# -eq 1 ]; then 
-	if [ "$file_ext" ];
+	if [ "$file_ext" == ".txt" ];
 	then
 		echo "[!] Data extracted from $dnsDataInput"
 		while read -r line;
@@ -72,27 +79,34 @@ if [ $# -eq 1 ]; then
 	fi
 elif [ $# -gt 1 ]; then
 	outputFileName=$2
-	if [ "$file_ext" ];
+	if [ "$file_ext" == ".txt" ];
 	then 
 		echo "[!] Data extracted from $dnsDataInput"
 		while read -r line;
 		do
-		dnsCheck "$line" >> "$outputFileName" 
-		done < "${dnsDataInput}"
-		echo "[!]Your file has been outputted to $outputFileName"
+			if [[ -f $outputFileName ]]; then 
+					dnsCheck "$line" >> "$outputFileName" 
+					#echo "File Exists"
+			else
+		   			touch $outputFileName
+					#echo "New File Made"
+					dnsCheck "$dnsDataInput" > "$outputFileName"
+			fi
+					
+			done < "${dnsDataInput}"
+		echo "[!] Your file has been outputted to $outputFileName"
 	else
-		dnsCheck "$dnsDataInput" >> "$outputFileName" 
-		echo "[!]Your file has been outputted to $outputFileName"
+		echo "[!] Incompatible read file used"
 	fi
 fi
 }
 
 function txtFileUtil(){
 txtFileDataInput=$1
-file_ext="$(echo "$txtFileDataInput" | /usr/bin/grep -Eo ".txt")"
+fileExt="$(echo "$txtFileDataInput" | /usr/bin/grep -Eo ".txt")"
 
 if [ $# -eq 1 ]; then 
-	if [ "$file_ext" ];
+	if [ "$file_ext" == ".txt" ];
 	then 
 	   	echo "[!] Data extracted from $txtFileDataInput"
 		while read -r line 
@@ -104,17 +118,22 @@ if [ $# -eq 1 ]; then
 	fi
 elif [ $# -gt 1 ]; then 
 	outputFileName=$2
-	if [ "$file_ext" ];
+	if [ "$file_ext" == ".txt" ];
 	then 
 		echo "[!] Data extracted from $txtFileDataInput"
 		while read -r line;
 		do
-		txtFileChecks "$line" >> "$outputFileName"
-		done < "${txtFileDataInput}"
-		echo "[!]Your file has been outputted to $outputFileName"
+			if [[ -f $outputFileName ]]; then 
+					txtFileChecks "$line" >> "$outputFileName" 
+					#echo "File Exists"
+			else
+		   			touch $outputFileName
+					#echo "New File Made"
+					txtFileChecks "$txtFileDataInput" > "$outputFileName"
+			fi
+	   done < "${txtFileDataInput}"
 	else
-		txtFileChecks "$txtFileDataInput" >> "$outputFileName"
-		echo "[!]Your file has been outputted to $outputFileName"
+			echo "[!] Incompatible read file used"
 	fi
 fi
 }
@@ -137,7 +156,7 @@ fi
 
 function bannerGrabbingUtil(){
 bannerGrabbingInput=$1
-file_ext="$(echo "$bannerGrabbingInput" | /usr/bin/grep -Eo ".txt" )"
+fileExt="$(echo "$bannerGrabbingInput" | /usr/bin/grep -Eo ".txt" )"
 if [ $# -eq 1 ]; then 
 	if [ "$file_ext" ];
 	then 
@@ -151,21 +170,41 @@ if [ $# -eq 1 ]; then
 	fi
 elif [ $# -gt 1 ]; then 
 	outputFileName=$2
-	if [ "$file_ext" ];
+	if [ "$file_ext" == ".txt" ];
 	then 
 		echo "[!] Data extracted from $bannerGrabbingInput"
 		while read -r line
 		do
-		bannerGrab "$line" >> "$outputFileName"
+			if [[ -f $outputFileName ]]; then 
+						bannerGrab "$line" >> "$outputFileName"
+						#echo "File Exists"
+				else
+						touch $outputFileName
+						#echo "New File Made"
+						bannerGrab "$bannerGrabbingInput" > "$outputFileName"
+				fi
 		done < "${bannerGrabbingInput}"
 	       	echo "Your file has been outputted to $outputFileName"	
 else 
-	bannerGrab "$bannerGrabbingInput" >> "$outputFileName"
-	echo "[!]File has been outputted to $outputFileName"
+				echo "[!] Incompatible read file used"
     fi
 fi
 }
 
+function socialMediaUtil(){
+socialMediaInput=$1
+fileExt="$(echo "$socialMediaInput" | /usr/bin/grep -Eo ".txt" )"
+	if [ "$fileExt" == ".txt" ];
+	then 
+		echo "[!] Data extracted from $whoisDataInput"
+		while read -r line;
+		do
+			socialMediaCheck "$line"
+		done < "${whoisDataInput}"
+	else
+		echo "[!] Incompatible read file used"
+	fi
+}
 
 function gobusterUtil(){
 mode="$1"
@@ -181,6 +220,19 @@ else
 	echo "[!] Unexpected error occured. Please try again"
 	echo "For help, enter \"--help\""
 fi
-
-
 }
+
+fileCheckUtil(){
+	fileName=$1
+	
+	if [[ -f $fileName ]]; then 
+		   >> $fileName
+		   #echo "File Exists"
+	else
+		   touch $fileName
+		   #echo "New File Made"
+		   >> $fileName
+    fi
+	}
+
+#whoisUtil $1 $2
